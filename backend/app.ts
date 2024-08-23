@@ -3,6 +3,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import userRouter from './routes/userRoute';
 import createHttpError, { isHttpError } from 'http-errors';
+import categoryRouter from './routes/categoryRoute';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/category', categoryRouter);
 
 app.get('/test', (req, res) => {
     res.send('Node Server Working!');

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import User from '../model/User';
 import createHttpError from 'http-errors';
-import bcrypt from 'bcryptjs';
+import bcrypt, { genSalt } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const usersController = {
@@ -72,6 +72,42 @@ const usersController = {
             username: user.username,
             email: user.email,
         });
+    }),
+    // Change Password
+    changeUserPassword: asyncHandler(async (req: Request, res: Response) => {
+        const { newPassword } = req.body;
+
+        const user = await User.findById(req.userId);
+        if (!user) {
+            throw createHttpError(404, 'User not found');
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        user.password = hashedPassword;
+
+        await user.save();
+
+        res.status(200).json({ message: 'Password changed successfully' });
+    }),
+    // Update Profile
+    updateUserProfile: asyncHandler(async (req: Request, res: Response) => {
+        const { username } = req.body;
+
+        const user = await User.findById(req.userId);
+        if (!user) {
+            throw createHttpError(404, 'User not found');
+        }
+
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            throw createHttpError(404, 'Username already in use');
+        }
+
+        user.username = username;
+        await user.save();
+
+        res.status(200).json({ message: 'Profile updated successfully' });
     }),
 };
 
