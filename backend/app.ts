@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import userRouter from './routes/userRoute';
 import createHttpError, { isHttpError } from 'http-errors';
 import categoryRouter from './routes/categoryRoute';
+import transactionRouter from './routes/transactionRoute';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 // Routes
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/category', categoryRouter);
+app.use('/api/v1/transaction', transactionRouter);
 
 app.get('/test', (req, res) => {
     res.send('Node Server Working!');

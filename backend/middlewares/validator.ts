@@ -41,6 +41,25 @@ export const createCategoryValidator = [
         .withMessage('Invalid category type'),
 ];
 
+export const createTransactionValidator = [
+    check('type')
+        .trim()
+        .notEmpty()
+        .withMessage('Category type is required')
+        .isIn(['income', 'expense'])
+        .withMessage('Invalid category type'),
+    check('category')
+        .trim()
+        .notEmpty()
+        .withMessage('Category for transaction is required'),
+    check('amount')
+        .trim()
+        .notEmpty()
+        .withMessage('Amount is required for transaction')
+        .isNumeric()
+        .withMessage('Amount should be numeric'),
+];
+
 export const validate = (req: Request, res: Response, next: NextFunction) => {
     const error = validationResult(req).array();
     if (error.length) {
