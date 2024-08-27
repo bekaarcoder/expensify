@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler';
 import Category from '../model/Category';
 import createHttpError from 'http-errors';
 import mongoose from 'mongoose';
+import Transaction from '../model/Transaction';
 const categoryController = {
     // Add
     create: asyncHandler(async (req: Request, res: Response) => {
@@ -54,6 +55,8 @@ const categoryController = {
             throw createHttpError(404, 'Category not found');
         }
 
+        const oldCategory = categoryExist.name;
+
         const categories = await Category.find({ user: req.userId });
         const remainingCategory = categories.filter(
             (category) => !category._id.equals(categoryId)
@@ -73,6 +76,19 @@ const categoryController = {
 
         const updatedCategory = await categoryExist.save();
 
+        // Update transactions category
+        await Transaction.updateMany(
+            {
+                user: req.userId,
+                category: oldCategory,
+            },
+            {
+                $set: {
+                    category: updatedCategory.name,
+                },
+            }
+        );
+
         res.status(200).json(updatedCategory);
     }),
     // Delete
@@ -90,6 +106,19 @@ const categoryController = {
         if (!categoryExist) {
             throw createHttpError(404, 'Category not found');
         }
+
+        // Update transactions category
+        await Transaction.updateMany(
+            {
+                user: req.userId,
+                category: categoryExist.name,
+            },
+            {
+                $set: {
+                    category: 'Uncategorized',
+                },
+            }
+        );
 
         await categoryExist.deleteOne();
 
