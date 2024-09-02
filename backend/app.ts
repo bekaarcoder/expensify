@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import userRouter from './routes/userRoute';
 import createHttpError, { isHttpError } from 'http-errors';
 import categoryRouter from './routes/categoryRoute';
@@ -13,6 +14,12 @@ mongoose
     .connect('mongodb://localhost:27017/mern-expenses')
     .then(() => console.log('Database connected'))
     .catch((e) => console.log(`Error connecting database: ${e}`));
+
+// cors config
+const corsOptions = {
+    origin: ['http://localhost:5173'],
+};
+app.use(cors(corsOptions));
 
 app.use(express.json());
 

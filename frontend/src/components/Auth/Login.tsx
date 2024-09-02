@@ -1,4 +1,57 @@
+import { useMutation } from '@tanstack/react-query';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { loginAPI } from '../../services/users/userServices';
+import { isAxiosError } from 'axios';
+import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../../redux/slice/authSlice';
+
+interface LoginFormValues {
+    email: string;
+    password: string;
+}
+
+// Validations
+const validationSchema = Yup.object({
+    email: Yup.string().email('Invalid email').required('Email is required'),
+    password: Yup.string().required('Password is required'),
+});
+
 const Login = () => {
+    const dispatch = useDispatch();
+    // Mutation
+    const { mutateAsync, isPending, error } = useMutation({
+        mutationFn: loginAPI,
+        mutationKey: ['login'],
+    });
+
+    const formik = useFormik<LoginFormValues>({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            console.log(values);
+            // http request
+            mutateAsync(values)
+                .then((data) => {
+                    toast.success('Logged in successfully!');
+                    dispatch(loginAction(data));
+                    localStorage.setItem('userInfo', JSON.stringify(data));
+                })
+                .catch((e) => {
+                    console.log('Error', e);
+                    if (isAxiosError(error)) {
+                        toast.error(error.response?.data.error);
+                    } else {
+                        toast.error('Invalid credentials!');
+                    }
+                });
+        },
+    });
+
     return (
         <div className="container">
             <div className="row my-5 justify-content-center">
@@ -9,7 +62,10 @@ const Login = () => {
                             <p className="text-center my-2">
                                 Login to access you account
                             </p>
-                            <form className="my-3">
+                            <form
+                                className="my-3"
+                                onSubmit={formik.handleSubmit}
+                            >
                                 <div className="mb-3">
                                     <label
                                         htmlFor="email"
@@ -19,10 +75,22 @@ const Login = () => {
                                     </label>
                                     <input
                                         type="email"
-                                        className="form-control"
+                                        className={
+                                            formik.touched.email &&
+                                            formik.errors.email
+                                                ? 'form-control is-invalid'
+                                                : 'form-control'
+                                        }
                                         id="email"
+                                        {...formik.getFieldProps('email')}
                                         placeholder="name@example.com"
                                     />
+                                    {formik.touched.email &&
+                                        formik.errors.email && (
+                                            <div className="invalid-feedback">
+                                                {formik.errors.email}
+                                            </div>
+                                        )}
                                 </div>
                                 <div className="mb-3">
                                     <label
@@ -33,13 +101,28 @@ const Login = () => {
                                     </label>
                                     <input
                                         type="password"
-                                        className="form-control"
+                                        className={
+                                            formik.touched.password &&
+                                            formik.errors.password
+                                                ? 'form-control is-invalid'
+                                                : 'form-control'
+                                        }
                                         id="password"
+                                        {...formik.getFieldProps('password')}
                                         placeholder="Password"
                                     />
+                                    {formik.touched.password &&
+                                        formik.errors.password && (
+                                            <div className="invalid-feedback">
+                                                {formik.errors.password}
+                                            </div>
+                                        )}
                                 </div>
                                 <div className="d-grid">
-                                    <button className="btn btn-primary">
+                                    <button
+                                        disabled={isPending}
+                                        className="btn btn-primary"
+                                    >
                                         Login
                                     </button>
                                 </div>
