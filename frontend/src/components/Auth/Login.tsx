@@ -6,6 +6,8 @@ import { isAxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { loginAction } from '../../redux/slice/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface LoginFormValues {
     email: string;
@@ -19,9 +21,11 @@ const validationSchema = Yup.object({
 });
 
 const Login = () => {
+    const navigate = useNavigate();
+
     const dispatch = useDispatch();
     // Mutation
-    const { mutateAsync, isPending, error } = useMutation({
+    const { mutateAsync, isPending, error, isSuccess } = useMutation({
         mutationFn: loginAPI,
         mutationKey: ['login'],
     });
@@ -51,6 +55,12 @@ const Login = () => {
                 });
         },
     });
+
+    useEffect(() => {
+        if (isSuccess) {
+            navigate('/');
+        }
+    }, [isSuccess, navigate]);
 
     return (
         <div className="container">
