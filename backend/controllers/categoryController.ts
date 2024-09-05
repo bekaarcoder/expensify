@@ -124,6 +124,24 @@ const categoryController = {
 
         res.status(204).json({ message: 'Category deleted successfully' });
     }),
+    // get Category
+    get: asyncHandler(async (req: Request, res: Response) => {
+        const { categoryId } = req.params;
+
+        if (!mongoose.isValidObjectId(categoryId)) {
+            throw createHttpError(404, 'Invalid category Id');
+        }
+
+        const categoryExist = await Category.findOne({
+            user: req.userId,
+            _id: categoryId,
+        });
+        if (!categoryExist) {
+            throw createHttpError(404, 'Category not found');
+        }
+
+        res.status(200).json(categoryExist);
+    }),
 };
 
 export default categoryController;

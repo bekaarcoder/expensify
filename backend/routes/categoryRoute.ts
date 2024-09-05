@@ -15,6 +15,8 @@ categoryRouter.post(
 
 categoryRouter.get('/lists', isAuthenticated, categoryController.lists);
 
+categoryRouter.get('/get/:categoryId', isAuthenticated, categoryController.get);
+
 categoryRouter.put(
     '/update/:categoryId',
     isAuthenticated,
