@@ -10,6 +10,8 @@ import AddCategory from './components/Category/AddCategory';
 import CategoryList from './components/Category/CategoryList';
 import './App.css';
 import UpdateCategory from './components/Category/UpdateCategory';
+import AddTransaction from './components/Transaction/AddTransaction';
+import Dashboard from './components/Home/Dashboard';
 
 function App() {
     const user = useAppSelector((state) => state?.auth?.user);
@@ -28,6 +30,8 @@ function App() {
                     path="/update-category/:id"
                     element={<UpdateCategory />}
                 />
+                <Route path="/add-transaction" element={<AddTransaction />} />
+                <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
         </BrowserRouter>
     );
