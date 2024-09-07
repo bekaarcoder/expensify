@@ -38,10 +38,23 @@ export const addTransactionAPI = async ({
     return response.data;
 };
 
+interface Filters {
+    startDate: string;
+    endDate: string;
+    type: string;
+    category: string;
+}
+
 // list
-export const getTransactionsAPI = async (): Promise<Transaction[]> => {
+export const getTransactionsAPI = async ({
+    startDate,
+    endDate,
+    type,
+    category,
+}: Filters): Promise<Transaction[]> => {
     const token = getUserFromStorage();
     const response = await axios.get(`${BASE_URL}/transaction/lists`, {
+        params: { startDate, endDate, type, category },
         headers: {
             Authorization: `Bearer ${token}`,
         },

@@ -34,16 +34,16 @@ const transactionController = {
         const { startDate, endDate, type, category } = req.query;
 
         let filters: TransactionFilter = { user: req.userId };
-        if (typeof startDate === 'string') {
+        if (typeof startDate === 'string' && startDate !== '') {
             filters.date = { ...filters.date, $gte: new Date(startDate) };
         }
-        if (typeof endDate === 'string') {
+        if (typeof endDate === 'string' && endDate !== '') {
             filters.date = { ...filters.date, $lte: new Date(endDate) };
         }
-        if (typeof type === 'string') {
+        if (typeof type === 'string' && type !== '') {
             filters.type = type;
         }
-        if (typeof category === 'string') {
+        if (typeof category === 'string' && category !== '') {
             if (category !== 'All') {
                 let transactionCategory =
                     category === 'Uncategorized' ? 'Uncategorized' : category;

@@ -33,6 +33,11 @@ const PrivateNavbar = () => {
                 >
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
+                            <Link to="/dashboard" className="nav-link">
+                                Dashboard
+                            </Link>
+                        </li>
+                        <li className="nav-item">
                             <Link to="/add-transaction" className="nav-link">
                                 Add Transaction
                             </Link>
