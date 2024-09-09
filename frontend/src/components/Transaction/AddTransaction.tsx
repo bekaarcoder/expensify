@@ -48,11 +48,12 @@ const AddTransaction = () => {
             description: '',
         },
         validationSchema,
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
             console.log(values);
             mutateAsync(values)
                 .then((data) => {
                     console.log(data);
+                    resetForm();
                     navigate('/dashboard');
                     toast.success('Transaction added successfully');
                 })
@@ -180,7 +181,7 @@ const AddTransaction = () => {
                                         htmlFor="date"
                                         className="form-label"
                                     >
-                                        Name
+                                        Date
                                     </label>
                                     <input
                                         type="date"

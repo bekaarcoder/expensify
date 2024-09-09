@@ -36,12 +36,13 @@ const Login = () => {
             password: '',
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
             console.log(values);
             // http request
             mutateAsync(values)
                 .then((data) => {
                     toast.success('Logged in successfully!');
+                    resetForm();
                     dispatch(loginAction(data));
                     localStorage.setItem('userInfo', JSON.stringify(data));
                 })

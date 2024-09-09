@@ -43,12 +43,13 @@ const Register = () => {
             confirmPassword: '',
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
             console.log(values);
             mutateAsync(values)
                 .then((data) => {
                     console.log(data);
                     toast.success('Registration Successful');
+                    resetForm();
                 })
                 .catch((e) => {
                     console.log('Error', e);

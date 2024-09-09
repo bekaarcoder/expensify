@@ -12,6 +12,9 @@ import './App.css';
 import UpdateCategory from './components/Category/UpdateCategory';
 import AddTransaction from './components/Transaction/AddTransaction';
 import Dashboard from './components/Home/Dashboard';
+import Profile from './components/Users/Profile';
+import AuthRoute from './components/Auth/AuthRoute';
+import PublicRoute from './components/Auth/PublicRoute';
 
 function App() {
     const user = useAppSelector((state) => state?.auth?.user);
@@ -21,17 +24,78 @@ function App() {
             {user ? <PrivateNavbar /> : <PublicNavbar />}
             <Toaster />
             <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/add-category" element={<AddCategory />} />
-                <Route path="/categories" element={<CategoryList />} />
+                <Route
+                    path="/"
+                    element={
+                        <PublicRoute>
+                            <HomePage />
+                        </PublicRoute>
+                    }
+                />
+                <Route
+                    path="/login"
+                    element={
+                        <PublicRoute>
+                            <Login />
+                        </PublicRoute>
+                    }
+                />
+                <Route
+                    path="/register"
+                    element={
+                        <PublicRoute>
+                            <Register />
+                        </PublicRoute>
+                    }
+                />
+                <Route
+                    path="/add-category"
+                    element={
+                        <AuthRoute>
+                            <AddCategory />
+                        </AuthRoute>
+                    }
+                />
+                <Route
+                    path="/categories"
+                    element={
+                        <AuthRoute>
+                            <CategoryList />
+                        </AuthRoute>
+                    }
+                />
                 <Route
                     path="/update-category/:id"
-                    element={<UpdateCategory />}
+                    element={
+                        <AuthRoute>
+                            <UpdateCategory />
+                        </AuthRoute>
+                    }
                 />
-                <Route path="/add-transaction" element={<AddTransaction />} />
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route
+                    path="/add-transaction"
+                    element={
+                        <AuthRoute>
+                            <AddTransaction />
+                        </AuthRoute>
+                    }
+                />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <AuthRoute>
+                            <Dashboard />
+                        </AuthRoute>
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        <AuthRoute>
+                            <Profile />
+                        </AuthRoute>
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );

@@ -101,7 +101,7 @@ const usersController = {
 
         const existingUser = await User.findOne({ username });
         if (existingUser) {
-            throw createHttpError(404, 'Username already in use');
+            throw createHttpError(400, 'Username already in use');
         }
 
         user.username = username;

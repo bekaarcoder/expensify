@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logoutAction } from '../../redux/slice/authSlice';
+import { BsPersonCircle } from 'react-icons/bs';
 
 const PrivateNavbar = () => {
     const dispatch = useDispatch();
@@ -53,7 +54,12 @@ const PrivateNavbar = () => {
                             </Link>
                         </li>
                     </ul>
-                    <ul className="navbar-nav mb-2 mb-lg-0">
+                    <ul className="navbar-nav mb-2 mb-lg-0 align-items-center">
+                        <li className="nav-item">
+                            <Link to="/profile" className="nav-link">
+                                <BsPersonCircle className="fs-3" />
+                            </Link>
+                        </li>
                         <li className="nav-item">
                             <button
                                 className="btn btn-sm btn-danger"

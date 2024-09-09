@@ -34,10 +34,11 @@ const AddCategory = () => {
     const formik = useFormik<CategoryFormValues>({
         initialValues,
         validationSchema,
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
             mutateAsync(values)
                 .then((data) => {
                     console.log(data);
+                    resetForm();
                     navigate('/categories');
                     toast.success('Category added successfully');
                 })
